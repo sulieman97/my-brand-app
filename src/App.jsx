@@ -262,14 +262,8 @@ const App = () => {
                   </div>
                 </div>
 
-                {/* برومبت الصور الاحترافي */}
-                <section className="bg-slate-900 text-white p-8 rounded-[2rem] shadow-xl">
-                  <div className="flex justify-between items-center mb-4">
-                    <h3 className="font-black text-indigo-300 flex items-center gap-2"><Sparkles /> Professional AI Prompt</h3>
-                    <button onClick={() => copyToClipboard(result.professional_ai_prompt)} className="flex items-center gap-2 bg-indigo-600 px-4 py-2 rounded-xl text-xs font-bold hover:bg-indigo-500 transition-all">
-                      {copied ? <CheckCircle2 size={14} /> : <ClipboardCheck size={14} />} {copied ? 'تم النسخ!' : 'نسخ البرومبت'}
-                    </button>
-                  </div>
+                
+                            
                   <div className="bg-black/30 p-4 rounded-xl border border-white/10">
                     <p className="text-sm font-mono text-left text-indigo-100" dir="ltr">{result.professional_ai_prompt}</p>
                   </div>
