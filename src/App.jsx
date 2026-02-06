@@ -145,23 +145,18 @@ const App = () => {
 
     try {
       // 2. استخدام الموديل الصحيح والمستقر
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: { 
-            responseMimeType: "application/json",
-            temperature: 0.7 
-          }
-        })
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error("Gemini API Error:", errorData);
-        throw new Error(errorData.error?.message || 'Failed to connect to AI');
-      }
+      // التعديل في سطر الـ fetch
+const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    contents: [{ parts: [{ text: prompt }] }],
+    generationConfig: { 
+      responseMimeType: "application/json",
+      temperature: 0.7 // إضافة اختيارية لجعل الإجابات أكثر إبداعاً
+    }
+  })
+});
 
       const data = await response.json();
       
