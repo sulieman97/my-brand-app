@@ -6,8 +6,21 @@ import {
 
 // تأكد من وضع المفتاح هنا أو التأكد من وجوده في إعدادات Vercel
 // البحث عن المفتاح في بيئة النظام بدلاً من وضعه يدوياً
-const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+// تأكد أن الاسم في Vercel مطابق تماماً لهذا: VITE_GEMINI_API_KEY
+const apiKey = import.meta.env.VITE_GEMINI_API_KEY; 
 
+// داخل دالة generateIdentity، استبدل رابط الـ fetch بهذا الرابط المستقر:
+const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    contents: [{ parts: [{ text: prompt }] }],
+    generationConfig: { 
+      responseMimeType: "application/json",
+      temperature: 0.7 
+    }
+  })
+});
 const App = () => {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState({});
