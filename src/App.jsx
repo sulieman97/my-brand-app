@@ -5,7 +5,8 @@ import {
 } from 'lucide-react';
 
 // تأكد من وضع المفتاح هنا أو التأكد من وجوده في إعدادات Vercel
-const apiKey = "ضع_مفتاحك_هنا"; 
+// البحث عن المفتاح في بيئة النظام بدلاً من وضعه يدوياً
+const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
 
 const App = () => {
   const [step, setStep] = useState(0);
