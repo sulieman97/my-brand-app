@@ -14,7 +14,8 @@ import {
   Info,
   Shapes,
   MessageSquare,
-  Globe
+  Globe,
+  Copy // تم إضافة أيقونة النسخ
 } from 'lucide-react';
 
 const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
@@ -25,6 +26,7 @@ const App = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
+  const [copied, setCopied] = useState(false); // حالة لتأكيد النسخ
 
   const questions = [
     {
@@ -100,6 +102,40 @@ const App = () => {
 
   const prevStep = () => {
     if (step > 0) setStep(step - 1);
+  };
+
+  // دالة نسخ المحتوى
+  const copyToClipboard = () => {
+    if (!result) return;
+    
+    const textToCopy = `
+العلامة التجارية: ${answers.brand_name}
+الوصف: ${answers.brand_desc}
+
+1. المقترحات اللفظية (Slogans):
+${result.slogans.map(s => `- ${s}`).join('\n')}
+
+2. لوحة الألوان:
+${result.colors.map(c => `- ${c.name} (${c.hex}): ${c.reason}`).join('\n')}
+
+3. الخط المقترح:
+- اسم الخط: ${result.typography.primary}
+- النمط: ${result.typography.style}
+
+4. مفهوم الشعار والأشكال:
+${result.logo_concept}
+
+5. تحليل الأشكال:
+${result.shapes_analysis}
+
+6. الأنماط البصرية (Patterns):
+${result.visual_patterns}
+    `.trim();
+
+    navigator.clipboard.writeText(textToCopy).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
   };
 
   const generateIdentity = async () => {
@@ -350,12 +386,33 @@ const App = () => {
                     </div>
                 </section>
 
-                <button 
-                  onClick={() => { setStep(0); setAnswers({}); setResult(null); }}
-                  className="w-full py-5 bg-indigo-600 text-white rounded-2xl font-black text-lg hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-100 flex items-center justify-center gap-3"
-                >
-                  <RefreshCw className="w-5 h-5" /> بدء جلسة عصف ذهني جديدة
-                </button>
+                <div className="space-y-4">
+                  <button 
+                    onClick={() => { setStep(0); setAnswers({}); setResult(null); }}
+                    className="w-full py-5 bg-indigo-600 text-white rounded-2xl font-black text-lg hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-100 flex items-center justify-center gap-3"
+                  >
+                    <RefreshCw className="w-5 h-5" /> بدء جلسة عصف ذهني جديدة
+                  </button>
+
+                  <button 
+                    onClick={copyToClipboard}
+                    className={`w-full py-4 rounded-2xl font-bold text-lg transition-all flex items-center justify-center gap-3 border-2 ${
+                      copied 
+                      ? 'bg-green-50 border-green-500 text-green-600' 
+                      : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                    }`}
+                  >
+                    {copied ? (
+                      <>
+                        <CheckCircle2 className="w-5 h-5" /> تم النسخ بنجاح
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-5 h-5" /> نسخ محتوى الهوية كاملاً
+                      </>
+                    )}
+                  </button>
+                </div>
               </div>
             )}
           </div>
